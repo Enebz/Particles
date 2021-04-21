@@ -14,7 +14,7 @@ private:
     sf::Clock deltaClock;
     sf::Time deltaTime;
     
-    Particles particles = Particles(window, 100000);
+    Particles particles = Particles(window, 50000);
 
 public:
 

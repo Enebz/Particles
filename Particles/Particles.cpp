@@ -24,7 +24,7 @@ void Particles::update(sf::Time deltaTime) {
 
 	for (int i = 0; i < this->amount; i++) {
 
-		sf::Vertex vertex = this->display[i];
+		sf::Vertex &vertex = this->display[i];
 		sf::Vector2f &velocity = this->velocities.at(i);
 
 		float distance = std::sqrt(std::pow(vertex.position.x - mousePos.x, 2) + std::pow(vertex.position.y - mousePos.y, 2));
@@ -34,13 +34,31 @@ void Particles::update(sf::Time deltaTime) {
 			(vertex.position.y - mousePos.y) / distance
 		);
 
-		float velocity_towards_pointer = 5;
+		float velocity_towards_pointer;
+
+		velocity_towards_pointer = std::sqrt(distance);
+		
 		velocity -= unit_direction_to_pointer * velocity_towards_pointer;
 
+		float vel_sum = std::abs(velocity.x + velocity.y);
 
-		this->display[i].color = sf::Color(150, 30, 245);
-		this->display[i].position.x += velocity.x * deltaTime.asSeconds();
-		this->display[i].position.y += velocity.y * deltaTime.asSeconds();
+		float r, g, b;
+		
+		b = 0;
+		r = 255;
+
+		if (vel_sum > 500) {
+			g = 0;
+		}
+		else {
+			g = 175 - (vel_sum / 500) * 175;
+		}
+
+		vertex.color = sf::Color(r, g, b);
+		vertex.position.x += velocity.x * deltaTime.asSeconds();
+		vertex.position.y += velocity.y * deltaTime.asSeconds();
+
+		sf::Vector2u window_size = this->window.getSize();
 	}
 
 }
